@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<style>
+	head {background-color:#FFEFD5}
+	body {background-color:#FFEFD5}
+	#inputTable{background-color:#F2F5A9}
+	#calculation{background-color:#F3E2A9}
+	#output{background-color:#F7BE81}
+	table{width:100%; border-bottom:2px solid #ddd}
+	th{text-align:left;}
+	td{width:33.33%; vertical-align:top;  border-bottom:2px solid #ddd}
+	textarea{width:95%; text-align:left}
+	input,select,button{width:50%}
+	#developer{font-size:10px}
+	h1{text-align:center}
+	h3{text-align:center}	
+</style>
+<meta charset = "UTF-8">
+<head>
+<script>
+	function pipeThickness() {
+		let dia = document.getElementById("txtOD").value;
+		let p = document.getElementById("txtPressure").value;
+		let CA = document.getElementById("txtCA").value;
+		let SMYS= document.getElementById("txtSMYS").value;
+		let F= document.getElementById("txtF").value;
+		let E = document.getElementById("txtE").value;
+		let T= document.getElementById("txtT").value;
+
+	// validating input data
+		if(isNaN(dia)){
+				document.getElementById("txtOD").value = "56";
+				dia = 56;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		}
+		if(isNaN(p)){
+				document.getElementById("txtPressure").value = "100";
+				p = 100;
+		}else{
+				//
+		}   
+		if(isNaN(CA)){
+				document.getElementById("txtCA").value = "1.5";
+				CA = 1.5;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		}  
+		if(isNaN(SMYS)){
+				document.getElementById("txtSMYS").value = "70000";
+				SMYS = 70000;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		}  
+		if(isNaN(F)){
+				document.getElementById("txtF").value = "0.6";
+				F = 0.6;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		}  
+		if(isNaN(E)){
+				document.getElementById("txtE").value = "1.0";
+				E= 1.0;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		}  
+		if(isNaN(T)){
+				document.getElementById("txtT").value = "1.0";
+				T = 1.0;
+		}else{
+			//ocument.write(dia + " is a number <br/>");
+		} 
+		
+		// end of input data validating    
+		//
+
+		// psi x 0.0689476 =  bar
+		// dia x 25.4 x 0.001 = m
+		// CA x 0.001 = m
+
+		let tReq = 12.7; //mm
+		tReq = (CA * 0.001 + p * dia * 25.4 * 0.001 / (2 * E * T * F * SMYS * 0.0689476)) * 1000
+		document.getElementById("txtOD8").value = tReq;
+
+		document.getElementById("txtResult").value = 
+		"Code:  ASME B31.8 (2016)\nInput: \n"+
+		"  Diameter:  "+dia+" in"+"\n"+
+		"  Pressure:  "+p+" bar"+"\n"+ 
+		"  corrosion allowance (CA):  "+CA+" mm"+"\n"+
+		"  SMYS:  "+SMYS+" psi\n"+
+		"  ِDesign factor:  "+F+"\n"+
+		"  Longitudinal joint factor (E):  "+E+"\n"+
+		"  Temperature derating factor (T):  "+T+"\n"+
+		"Calculation:\n"+
+		"  ((CA * 0.001 + p * dia * 25.4 * 0.001) / \n  (2 * E * T * F * SMYS * 0.0689476)) * 1000\n"+
+		"Output:\n"+
+		"  Required Wall thickness:  "+tReq+ " mm"		
+	}
+</script>
+<noscript> Your browser does not support JavaScript! </noscript>
+<TITLE></TITLE>
+<h1>Onshore Gas pipelines minimum wall thickness calculation</h1>
+<h3>It calculates onshore Gas pipelines Minimum Requires wall thickness as per ASME B31.8 (2016) for its burst pressure.</h3>
+</head>
+<body >
+<table id="inputTable">
+  <tr>
+    <th>Input data </th>
+  </tr>
+  <tr>
+    <td>Diameter (inch): </th>
+    <td><input type="text" id="txtOD" value="56"></th> 
+    <td> It must be greater than 0.0 </td>
+  </tr>
+  <tr>
+    <td>Pressure (bar):</td>
+    <td><input type="text" id="txtPressure" value="100"></td>
+    <td> Internal pressure - External pressure (if any) </td>
+  </tr>
+  <tr>
+    <td>Corrosion Allowance (C.A) (mm):</td>
+    <td><input type="text" id="txtCA" value="1.5"></td>
+    <td> It can be either 0.0 or a positive value </td>
+  </tr>
+  <tr>
+    <td>Specified minimum yield strength (SMYS) (psi):</td>
+    <td><input type="text" id="txtSMYS" value="70000"></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>Design Factor (F): </td>
+    <td>
+    	<form>
+			<select id="txtF">
+  				<option>0.4</option>
+  				<option>0.5</option>
+  				<option>0.6</option>
+  				<option>0.72</option>
+			</select>
+		</form>   
+    </td>
+    <td> Table 841.1.6-1 of ASME B31.8 (2016) </td>
+  </tr>
+  <tr>
+    <td>Longitudinal joint factor (E):</td>
+    <td>
+        	<form>
+			<select id="txtE">
+  				<option>1.0</option>
+  				<option>0.8</option>
+  				<option>0.6</option>
+			</select>
+		</form>  
+    </td>
+    <td> Obtained from
+Table 841.1.7-1 [see also para. 817.1.3(d)] of ASME B.31.8 </td>
+  </tr>
+  <tr>
+    <td>Temperature derating factor (T):</td>
+    <td><input type="text" id="txtT" value="1.0" ></td>
+    <td> Obtained from Table 841.1.8-1 of  ASME B.31.8 </td>
+  </tr>
+</table>
+<div id="calculation">
+	<table>
+	  <tr>
+		<th>Calculation </th>
+	  </tr>
+	  <tr>
+		<td>Click on the button</th>
+		<td><button onclick="pipeThickness()">Calculate</button></th> 
+		<td>You can copy result summary below</td>
+	  </tr>	
+	  </table>	
+</div>
+<div id="output">
+	<table>
+	  <tr>
+		<th>Output result: </th>
+	  </tr>
+	  <tr>
+		<td>Required wall thickness of the gas pipeline (mm) </td>
+		<td><input type="text" id="txtOD8" value="38.33957092052516" readOnly = "true"></td> 
+		<td>It should be checked to be greater than the selected linepipe wall thickness. </td>
+	  </tr>
+	</table>
+	<p><textarea id="txtResult" rows="15"></textarea></p>
+</div>
+
+<p id="developer">written by M.B. (BazzazNobari@Yahoo.com)</p>
+</body>
+</html>
